@@ -1,6 +1,6 @@
 ## Welcome 
 
-Gliese581c is a repository for code and notes. 
+Gliese581c is a repository for Liang Gang's exploratory code and notes. 
 
 ## Description 
 Liang Gang's personal fun projects.  
