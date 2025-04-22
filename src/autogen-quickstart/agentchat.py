@@ -39,5 +39,6 @@ async def main() -> None:
 
 # NOTE: if running this inside a Python script you'll need to use asyncio.run(main()).
 import asyncio
+import httpx
 
 asyncio.run(main())

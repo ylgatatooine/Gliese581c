@@ -5,6 +5,10 @@ AutoGen - a framework for building AI agents and applications. Currently 0..5.2 
 
 ## Installation 
 
+cd src/
+mkdir autogen-quickstart
+cd autogen-quickstart
+
 python3 -m venv .venv
 source .venv/bin/activate
 
