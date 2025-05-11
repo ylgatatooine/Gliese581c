@@ -1,0 +1,331 @@
+@MacBookPro autogen-quickstart % python youtube_transcript_agents.py
+Processing video ID: egSh4TxS5go
+---------- TextMessage (user) ----------
+Fetch the transcript of the YouTube video with ID egSh4TxS5go and summarize it.
+---------- ToolCallRequestEvent (YouTube_Transcript_Agent) ----------
+[FunctionCall(id='call_BT62fl9nvqnZq1gEAoAkN9DT', arguments='{"video_id": "egSh4TxS5go"}', name='fetch_youtube_transcript')]
+---------- ToolCallExecutionEvent (YouTube_Transcript_Agent) ----------
+[FunctionExecutionResult(content="Everything we're about to talk about is\nwhat's next. And the first person up\nhere is Harrison Chase, our very own\nHarrison Chase, who's been at Every AIN.\nHe's been talking about agents longer\nthan anyone I know. We'd love to have\nyou come up here and talk about agents,\nin particular, ambient agents, this new\nconcept that you guys at Langchain are\nbringing to the\nworld. Thanks for that intro and excited\nto be chatting. My name is Harrison,\nco-founder CEO of Langchain. We build\ndeveloper tools to make it as easy as\npossible to build agents. Um, a lot of\nthe agents that we've seen being built\nso far are what I would call chat\nagents. So, you interact with them\nthrough a chat interface, send them\nmessages, they they run and respond and\nand that's great. They're great for a\nlot of purposes. But one of the concepts\nthat I'm really excited about is the\nconcept of ambient agents. So, what is\nan ambient agent? The way that I like to\ndefine an ambient agent is ambient\nagents listen to an event stream and act\non it accordingly, potentially acting on\nmultiple events at a time. And so what\nare the differences between this and\nnormal agents? So there's a few. One,\nwhat are the trigger? So it's no longer\na human coming in and sending a message.\nIt's an event that happens in in in the\nbackground. How many of these can be\nrunning? With chat, you can usually only\ninteract with one agent at a time. Maybe\nyou open a few windows and you have a\nfew running at the same time, but it's\ngenerally one. with ambient style agents\nbecause it's listening to these events.\nIt's it's however many events are\nhappening in the background. So, it can\nbe a far bigger type of\nnumber. Another interesting point is the\nlatency requirements around it. So, with\nchat, you message, you expect some\nresponse back pretty quickly or you get\nbored and you go to another website or\nsomething like that. Because these\nambient agents run in the background,\nthey're triggered by events. They can\nrun for a lot longer period of time\nbefore you need a response in any shape\nor form. So there's generally much less\nstrict latency requirements. And then\nlastly, I think it's interesting to\nthink about the UX of these agents. So\nfor these chat agents, it's mostly chat\nbots. That's a pretty familiar interface\nby now. I think there's a little bit of\na question of how do you interact with\nthese agents that are in the background\nbecause they they they are running\nwithout you knowing that they're\nrunning. But as I'll talk about in a\nlittle bit, it's still really important\nfor you to interact with them in some\nform.\nSo, just to make this concrete, an\nexample of an ambient agent could be an\nemail agent that listens to emails\ncoming in and acts on them accordingly\nand maybe tries to respond or maybe\ntries to schedule meetings or maybe\npings you or pings other people on the\nteam. So, that's kind of like a concrete\nexample of of one type of ambient agent\nthat we're seeing. So, why ambient\nagents? I think they're interesting for\na few reasons. First, they let us scale\nourselves. So, if you interact with a\nchat agent, it's generally onetoone.\nYou're doing one thing at a time. when\nyou have these ambient agents, there can\nbe thousands of them running in the\nbackground. And so that just lets us\nscale our impact a lot\nmore. Two, they can they can get at kind\nof like more complex operations. So when\nyou're interacting with a chat agent,\nit's generally because of the latency\nrequirements, it's generally a simpler\noperation that it's doing. So you might\nhave the human send a message, it goes\nto the the chatbot, the agent, it\nresponds right away. Maybe it calls a\ntool, maybe two tools. The long more\ntools it calls, the longer it takes to\nrun. can't do that with ambient agents\nbecause you don't have this as strict\nlatency requirement. You can call a ton\nof tools and do more and more complex\noperations. You can add in other steps\nas well. So you can add in explicit\nplanning or reflection steps and\ngenerally build up the complexity of the\nagents that you're\nbuilding. One thing that I really want\nto highlight is ambient does not mean\nfully autonomous. So I still think it's\nreally important that we are able to\ninteract with these ambient agents. And\nthere's a few different interaction\npatterns that we see people building\ntowards. So one is approving or\nrejecting certain actions that these\nagents want to do. If you want to have\nan ambient agent that's potentially\ngiving refunds to customers who are\nemailing in, definitely when it starts,\nyou're going to want to have a human in\nthere approving some of those things.\nSecond is a more uh advanced option of\nthis editing the actions that they do.\nSo maybe they suggest something you\ndon't want to approve or reject it, but\nyou want to explicitly edit it and have\nit do that. Um, third, these agents can\nget stuck kind of like halfway down and\nso there should be an inability for you\nto answer questions that they might\nhave, uh, just like you would answer\nquestions of a co-orker if they're\nworking on a deep problem or something\nlike that. And then fourth, because\nthese agents take a lot of steps, it\nmight be very useful for you to go back\nto the 10th out of a hundred steps or\nsomething like that, interact with it\nthere, modify what it's doing, give it\nsome feedback. And so this is what we\ncall time travel. and facilitating this\nis a a cool new interaction pattern we\nsee. Um, so there's a few reasons that\nhaving this human in the loop is\nimportant. First, it just gives better\nresults. So, if you think about deep\nresearch, which isn't exactly an ambient\nagent, but it is a longunning agent,\nthere's a period of time up front where\nit asks you some clarifying questions to\ngo back and forth, and that generally\nhelps produce way better results than if\nit just went off whatever your initial\nkind of like question or statement was.\nAnd so having this human in the loop in\nthe form of deep research, asking these\nclarifying questions, in the form of\nambient agents, there's there's\ndifferent types of patterns. This just\ngets better results. It also helps build\nmore trust. Um, so if you're doing\nexplicit actions like giving giving or\nsending payments or approving things,\nhaving the human loop just builds more\ntrust. And then and then third, and this\nis maybe the most subtle one, is I think\nit it helps a lot with the memory of the\nagent. So when I'm talking about memory,\nI'm talking about learning from user\ninteractions. If you don't have the user\ninteracting with the agent, then there\nare no user interactions to learn from.\nUm, and so having this uh having this\nhuman in the loop helps inform a lot of\nthe memory things that you want to be\nbuilding into the agent so that it can\ndo better in the future. And so with\nthis importance of uh the human in the\nloop, I think it's interesting to think\nabout what a good UX for this might look\nlike. This is one thing that we've kind\nof built as a prototype at Langchain,\nwhich is the concept, we call it an\nagent inbox. It's an inbox for your\nagent to send things to. You can see\nwhen it requires actions. You can see\nsome descriptions. If you click into a\nrow, you can then see a more detailed\ndescription of of of what's going on,\nwhat explicitly it wants approval for or\nor whether you want to respond to it.\nAnd there's a few different interaction\npatterns here. Talking a little bit uh\nvery briefly about some of the things\nthat we're building that we think help\nwith this. We've paid a lot of attention\nuh in Langraph, which is our agent\norchestration framework to make it good\nat ambient agents. In particular, we've\npaid a ton of attention to the\npersistence layer that backs it. This\nenables a lot of these human interaction\npatterns because basically you can run\nyour langraph agent. You can stop at any\npoint in time. The entire state as well\nas previous states are persisted. And so\nthen you can have the all the human and\nloop interaction patterns. You can wait\nfor a second, a day, an hour, however\nlong, have the user come in, see the\nstate, modify it, go back to previous\nstates, things like that. Um, we're\nspending a lot of time right now on\nLingraph platform as infrastructure for\nrunning these agents. These agents are\noften way more longunning. They're often\nbursty because they're triggered by\nevents. So, you could get thousands of\nevents at a time. So, you need to be\nable to scale up and they're flaky in\nnature, not just because of typical\nsoftware things, but also because of\nthis human in the blue pattern. You want\nto be able to correct mistakes. And then\nfinally, we're we're building Langmith\nas well for these agents. They're really\nlong running. They can often mess up.\nThey're doing more complex things.\nhaving visibility and observability into\nwhat they're doing is really really\nimportant. As a concrete example of\nthis, uh, one of the things that I built\non the side is an email agent. So, if\nyou've emailed me in the past, uh, year\nor so, uh, it's it's drafted a response\nor sent a calendar invite. It's still\nhuman in the loop. I use the agent inbox\nall the time. It's open source and on\nGitHub. So, if you want to see how all\nthese components come together in what I\nthink is a pretty cool and unique and\nhopefully uh glimpse of what's next, uh\nI would encourage you to check it out.\nAnd with that, I will hand it off.\n[Applause]", name='fetch_youtube_transcript', call_id='call_BT62fl9nvqnZq1gEAoAkN9DT', is_error=False)]
+---------- ToolCallSummaryMessage (YouTube_Transcript_Agent) ----------
+Everything we're about to talk about is
+what's next. And the first person up
+here is Harrison Chase, our very own
+Harrison Chase, who's been at Every AIN.
+He's been talking about agents longer
+than anyone I know. We'd love to have
+you come up here and talk about agents,
+in particular, ambient agents, this new
+concept that you guys at Langchain are
+bringing to the
+world. Thanks for that intro and excited
+to be chatting. My name is Harrison,
+co-founder CEO of Langchain. We build
+developer tools to make it as easy as
+possible to build agents. Um, a lot of
+the agents that we've seen being built
+so far are what I would call chat
+agents. So, you interact with them
+through a chat interface, send them
+messages, they they run and respond and
+and that's great. They're great for a
+lot of purposes. But one of the concepts
+that I'm really excited about is the
+concept of ambient agents. So, what is
+an ambient agent? The way that I like to
+define an ambient agent is ambient
+agents listen to an event stream and act
+on it accordingly, potentially acting on
+multiple events at a time. And so what
+are the differences between this and
+normal agents? So there's a few. One,
+what are the trigger? So it's no longer
+a human coming in and sending a message.
+It's an event that happens in in in the
+background. How many of these can be
+running? With chat, you can usually only
+interact with one agent at a time. Maybe
+you open a few windows and you have a
+few running at the same time, but it's
+generally one. with ambient style agents
+because it's listening to these events.
+It's it's however many events are
+happening in the background. So, it can
+be a far bigger type of
+number. Another interesting point is the
+latency requirements around it. So, with
+chat, you message, you expect some
+response back pretty quickly or you get
+bored and you go to another website or
+something like that. Because these
+ambient agents run in the background,
+they're triggered by events. They can
+run for a lot longer period of time
+before you need a response in any shape
+or form. So there's generally much less
+strict latency requirements. And then
+lastly, I think it's interesting to
+think about the UX of these agents. So
+for these chat agents, it's mostly chat
+bots. That's a pretty familiar interface
+by now. I think there's a little bit of
+a question of how do you interact with
+these agents that are in the background
+because they they they are running
+without you knowing that they're
+running. But as I'll talk about in a
+little bit, it's still really important
+for you to interact with them in some
+form.
+So, just to make this concrete, an
+example of an ambient agent could be an
+email agent that listens to emails
+coming in and acts on them accordingly
+and maybe tries to respond or maybe
+tries to schedule meetings or maybe
+pings you or pings other people on the
+team. So, that's kind of like a concrete
+example of of one type of ambient agent
+that we're seeing. So, why ambient
+agents? I think they're interesting for
+a few reasons. First, they let us scale
+ourselves. So, if you interact with a
+chat agent, it's generally onetoone.
+You're doing one thing at a time. when
+you have these ambient agents, there can
+be thousands of them running in the
+background. And so that just lets us
+scale our impact a lot
+more. Two, they can they can get at kind
+of like more complex operations. So when
+you're interacting with a chat agent,
+it's generally because of the latency
+requirements, it's generally a simpler
+operation that it's doing. So you might
+have the human send a message, it goes
+to the the chatbot, the agent, it
+responds right away. Maybe it calls a
+tool, maybe two tools. The long more
+tools it calls, the longer it takes to
+run. can't do that with ambient agents
+because you don't have this as strict
+latency requirement. You can call a ton
+of tools and do more and more complex
+operations. You can add in other steps
+as well. So you can add in explicit
+planning or reflection steps and
+generally build up the complexity of the
+agents that you're
+building. One thing that I really want
+to highlight is ambient does not mean
+fully autonomous. So I still think it's
+really important that we are able to
+interact with these ambient agents. And
+there's a few different interaction
+patterns that we see people building
+towards. So one is approving or
+rejecting certain actions that these
+agents want to do. If you want to have
+an ambient agent that's potentially
+giving refunds to customers who are
+emailing in, definitely when it starts,
+you're going to want to have a human in
+there approving some of those things.
+Second is a more uh advanced option of
+this editing the actions that they do.
+So maybe they suggest something you
+don't want to approve or reject it, but
+you want to explicitly edit it and have
+it do that. Um, third, these agents can
+get stuck kind of like halfway down and
+so there should be an inability for you
+to answer questions that they might
+have, uh, just like you would answer
+questions of a co-orker if they're
+working on a deep problem or something
+like that. And then fourth, because
+these agents take a lot of steps, it
+might be very useful for you to go back
+to the 10th out of a hundred steps or
+something like that, interact with it
+there, modify what it's doing, give it
+some feedback. And so this is what we
+call time travel. and facilitating this
+is a a cool new interaction pattern we
+see. Um, so there's a few reasons that
+having this human in the loop is
+important. First, it just gives better
+results. So, if you think about deep
+research, which isn't exactly an ambient
+agent, but it is a longunning agent,
+there's a period of time up front where
+it asks you some clarifying questions to
+go back and forth, and that generally
+helps produce way better results than if
+it just went off whatever your initial
+kind of like question or statement was.
+And so having this human in the loop in
+the form of deep research, asking these
+clarifying questions, in the form of
+ambient agents, there's there's
+different types of patterns. This just
+gets better results. It also helps build
+more trust. Um, so if you're doing
+explicit actions like giving giving or
+sending payments or approving things,
+having the human loop just builds more
+trust. And then and then third, and this
+is maybe the most subtle one, is I think
+it it helps a lot with the memory of the
+agent. So when I'm talking about memory,
+I'm talking about learning from user
+interactions. If you don't have the user
+interacting with the agent, then there
+are no user interactions to learn from.
+Um, and so having this uh having this
+human in the loop helps inform a lot of
+the memory things that you want to be
+building into the agent so that it can
+do better in the future. And so with
+this importance of uh the human in the
+loop, I think it's interesting to think
+about what a good UX for this might look
+like. This is one thing that we've kind
+of built as a prototype at Langchain,
+which is the concept, we call it an
+agent inbox. It's an inbox for your
+agent to send things to. You can see
+when it requires actions. You can see
+some descriptions. If you click into a
+row, you can then see a more detailed
+description of of of what's going on,
+what explicitly it wants approval for or
+or whether you want to respond to it.
+And there's a few different interaction
+patterns here. Talking a little bit uh
+very briefly about some of the things
+that we're building that we think help
+with this. We've paid a lot of attention
+uh in Langraph, which is our agent
+orchestration framework to make it good
+at ambient agents. In particular, we've
+paid a ton of attention to the
+persistence layer that backs it. This
+enables a lot of these human interaction
+patterns because basically you can run
+your langraph agent. You can stop at any
+point in time. The entire state as well
+as previous states are persisted. And so
+then you can have the all the human and
+loop interaction patterns. You can wait
+for a second, a day, an hour, however
+long, have the user come in, see the
+state, modify it, go back to previous
+states, things like that. Um, we're
+spending a lot of time right now on
+Lingraph platform as infrastructure for
+running these agents. These agents are
+often way more longunning. They're often
+bursty because they're triggered by
+events. So, you could get thousands of
+events at a time. So, you need to be
+able to scale up and they're flaky in
+nature, not just because of typical
+software things, but also because of
+this human in the blue pattern. You want
+to be able to correct mistakes. And then
+finally, we're we're building Langmith
+as well for these agents. They're really
+long running. They can often mess up.
+They're doing more complex things.
+having visibility and observability into
+what they're doing is really really
+important. As a concrete example of
+this, uh, one of the things that I built
+on the side is an email agent. So, if
+you've emailed me in the past, uh, year
+or so, uh, it's it's drafted a response
+or sent a calendar invite. It's still
+human in the loop. I use the agent inbox
+all the time. It's open source and on
+GitHub. So, if you want to see how all
+these components come together in what I
+think is a pretty cool and unique and
+hopefully uh glimpse of what's next, uh
+I would encourage you to check it out.
+And with that, I will hand it off.
+[Applause]
+---------- TextMessage (editor1) ----------
+Everything we're about to discuss is what's next. The first speaker is Harrison Chase, our very own Harrison Chase, who has been talking about agents longer than anyone I know. We’d love for him to come up and speak about agents, particularly ambient agents—this new concept that you guys at LangChain are bringing to the world. Thanks for that introduction, and I’m excited to be here. My name is Harrison, and I am the co-founder and CEO of LangChain. We build developer tools to make it as easy as possible to create agents.
+
+A lot of the agents we've seen so far are what I would call chat agents: you interact with them through a chat interface, send messages, and they run and respond. That works well for many purposes. However, one concept I’m particularly excited about is the idea of ambient agents. So, what is an ambient agent? I define an ambient agent as one that listens to an event stream and acts on it accordingly, potentially handling multiple events simultaneously.
+
+What are the differences between this and traditional agents? There are several. First, the trigger: for chat agents, a human sends a message to initiate interaction. For ambient agents, events occur in the background without human prompting. Second, the number of agents: with chat, you usually interact with one agent at a time—maybe a few if you have multiple chat windows open—but generally, just one. With ambient agents, they listen to multiple background events, allowing many of them to run concurrently.
+
+Third, latency requirements differ. Chat interactions expect quick responses; if the reply takes too long, users might become bored and switch to another website. Ambient agents, however, run in the background and are triggered by events, so they can operate over longer periods without the immediate need for a response, meaning the latency can be less strict. Lastly, user experience (UX) differs. Chat agents typically involve a straightforward chat interface, which is familiar now. For ambient agents, since they run without your direct awareness, designing how you interact with them becomes more nuanced. It's still important to have ways to engage with these agents meaningfully.
+
+To make this concrete, an example of an ambient agent could be an email agent that monitors incoming emails, responds to them, schedules meetings, or notifies you and your team. That's a tangible example of an ambient agent in action.
+
+Why are ambient agentsinteresting? First, they allow us to scale our impact. Interacting with a chat agent is usually a one-to-one, one task at a time process. Ambient agents, on the other hand, can operate in the background and handle thousands of events simultaneously. Second, they enable more complex operations. Because they don’t need to respond immediately, they can call multiple tools, perform complex tasks, and incorporate planning or reflection steps—building more sophisticated agents.
+
+It’s important to note that ambient does not mean fully autonomous. Human oversight remains crucial. Several interaction patterns are emerging: humans can approve or reject actions, edit suggested actions, intervene if agents get stuck, or review steps during longer processes—what we call "time travel." This involvement helps ensure better results, especially when performing tasks like refunds or payments.
+
+Having a human in the loop also builds trust and improves memory—learning from user interactions to refine future performance. Without user interaction, agents have nothing to learn from. Human oversight informs and enhances the memory component of these systems.
+
+Designing a good UX for ambient agents is vital. We’ve prototyped an "agent inbox," a system where users can see tasks requiring action, view detailed information, and approve or modify actions. Our framework, LangGraph, supports building these processes by persisting state and previous interactions, allowing you to pause, review, and resume long-running agents seamlessly. Since these agents can be triggered by many events, scalability and observability are also critical—candidates for ongoing development.
+
+For example, I built an email agent that drafts responses or schedules calendar invites based on incoming emails. It operates with human oversight and is open source on GitHub. I use this agent inbox regularly, and hope others find it helpful.
+
+To sum up, the future of agents involves more background operation, higher scalability, complex task handling, and human involvement for oversight and trust. For more details and to see how the components come together, I encourage you to check out our tools and demos. That concludes my presentation, and I look forward to your questions.
+---------- TextMessage (editor2) ----------
+- Harrison Chase, Co-founder & CEO of LangChain, discusses the future of agents, emphasizing ambient agents.
+- **Traditional vs. Ambient Agents:**
+  - *Traditional:* Chat-based; human sends messages; single interaction.
+  - *Ambient:* Listens to background event streams; handles multiple events simultaneously; less strict latency requirements.
+- **Key Characteristics of Ambient Agents:**
+  - Triggered by background events, not human input.
+  - Capable of running many instances concurrently.
+  - Operate over longer periods without immediate responses.
+  - UX involves designing interactions beyond simple chat, as they run unnoticed.
+- **Example:** Email agent that monitors incoming emails, responds, schedules meetings, or notifies teams.
+- **Advantages of Ambient Agents:**
+  - Scale impact by managing thousands of events.
+  - Enable complex operations, including calling multiple tools and planning.
+- **Human Oversight:** Crucial for trust, better results, and learning (memory).
+  - Interaction patterns include approval, edits, intervention, and "time travel" for reviewing steps.
+- **UX Innovations:**
+  - Prototype "agent inbox" for task management, approvals, and detailed views.
+  - LangGraph framework supports persistence, scalability, and observability.
+- **Practical Example:** An open-source email agent drafts responses and schedules invites; used regularly.
+- **Conclusion:** Ambient agents open avenues for scalable, complex, and human-supervised automation.
+---------- TextMessage (final_reviewer) ----------
+Harrison Chase, Co-founder and CEO of LangChain, discusses the future of agents, focusing on the concept of ambient agents. 
+
+**Traditional vs. Ambient Agents:**  
+- *Traditional:* Chat-based; involves human-initiated messages; typically one interaction at a time.  
+- *Ambient:* Listens to background event streams; manages multiple events simultaneously; less strict latency constraints.  
+
+**Key Characteristics of Ambient Agents:**  
+- Triggered by background events without human prompting.  
+- Capable of running many instances concurrently.  
+- Operate over extended periods without requiring immediate responses.  
+- UX involves designing new interaction paradigms because these agents run covertly.
+
+**Example:** An email agent that monitors incoming messages, responds, schedules meetings, or notifies team members.  
+
+**Advantages:**  
+- Enable scaling impact by handling thousands of background events.  
+- Facilitate more complex tasks, such as calling multiple tools and incorporating planning or reflection.
+
+**Human Oversight:**  
+Maintaining human oversight is vital for building trust, ensuring quality, and improving learning (or "memory") through user interactions. Interaction patterns include approval, editing, intervening if the agent gets stuck, and a "time travel" feature for reviewing and modifying past steps.
+
+**UX Innovations:**  
+- Prototype "agent inbox" allows users to see tasks requiring action, review details, and approve or modify outputs.  
+- The LangGraph framework supports persistence, scalability, and observability—key for managing long-running, event-driven agents.
+
+**Practical Example:** Harrison built an open-source email agent that drafts responses and schedules invites, which he uses regularly.
+
+**Conclusion:**  
+Ambient agents present a scalable, capable, and human-supervised approach to automation, opening new possibilities for complex, background-driven processes.
+---------- StopMessage (DiGraphStopAgent) ----------
+Digraph execution is complete
