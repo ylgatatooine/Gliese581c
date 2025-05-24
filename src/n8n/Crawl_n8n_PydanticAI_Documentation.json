@@ -1,0 +1,697 @@
+{
+  "name": "PydanticAI Documentation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7fa70b20-d6c6-46cb-9c4f-7d698e434431",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        775
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://ai.pydantic.dev/sitemap.xml",
+        "options": {}
+      },
+      "id": "cefa8b61-c7aa-48af-978b-51e134f58190",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        775
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f2640125-a67e-4e26-aa34-9f351c31125a",
+      "name": "XML",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        0,
+        775
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "urlset.url",
+        "options": {}
+      },
+      "id": "8e773132-62c2-498a-88f6-e66fe3838381",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        220,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6b7723c1-cc38-4983-b543-6031a6ad7610",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        440,
+        775
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a06a6a8e-0477-457c-9936-0b8d82f8c5e3",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        575
+      ],
+      "webhookId": "9af87c5e-b07f-48dc-9ca8-61b471a24cad"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ylg-seashell-app-nlb4f.ondigitalocean.app/crawl",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "urls",
+              "value": "={{ $json.loc }}"
+            },
+            {
+              "name": "priority",
+              "value": "10"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c805ef09-8939-4ae8-aad1-723c975a442d",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        575
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Ok5iF0DBRkoxfGhk",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://ylg-seashell-app-nlb4f.ondigitalocean.app/task/{{ $json.task_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "9756f628-2f8b-4bfe-a561-a2edf052cb84",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        580
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Ok5iF0DBRkoxfGhk",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9d90c1ce-590e-40a5-ae8c-d92326032975",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3d663934-6f05-4c83-a74e-43eda4b91782",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1360,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 5000
+      },
+      "id": "38b84f1e-4122-40c2-ae4d-6d4ad53add32",
+      "name": "Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "bc776214-8384-4041-8130-38323cb020c4",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        1140
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "y6R0f7kOtk6aZDty",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2bcdb54-e1fe-4670-99aa-6eec973bf5f1",
+              "name": "task_id",
+              "value": "={{ $('HTTP Request1').item.json.task_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a8abf4ee-4e9a-4c81-84d4-83bba60324ae",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "0dfa743e-a8ca-49a8-af6c-c77736206434",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1540,
+        20
+      ],
+      "webhookId": "0949763f-f3f7-46bf-8676-c050d92e6966"
+    },
+    {
+      "parameters": {
+        "model": "gpt-4.1-nano",
+        "options": {}
+      },
+      "id": "238788e6-1b81-42e7-9eaf-a56e66ac410c",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -1320,
+        240
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "y6R0f7kOtk6aZDty",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "f4f1c01c-e25a-4626-af01-01357cfe6e85",
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -1200,
+        240
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "E5Cnx1d4h7EZgwta",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "pydantic_ai_docs",
+        "description": "Retrieves data related to Pydantic AI using their documentation."
+      },
+      "id": "c8c17bb7-dced-4325-8ca3-449802f0be03",
+      "name": "Vector Store Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        -1080,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "560f2cd4-f0c8-4cd5-9e3a-171cc0844642",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        -1100,
+        640
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "y6R0f7kOtk6aZDty",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4.1-nano",
+        "options": {}
+      },
+      "id": "861ae6a8-7a9f-4a72-b317-c4cf8ed8135d",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        440
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "y6R0f7kOtk6aZDty",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "fd550f4d-ec6e-41af-a668-acb5124a164f",
+      "name": "Supabase Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        980,
+        900
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "J5TwYnqwpR5SD6P0",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "264e4dc0-5f8f-4dd0-b122-951b3b634fc9",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -1280,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "f4524a66-994a-4b28-92c5-4bc5f6774669",
+      "name": "Supabase Vector Store1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        440
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "J5TwYnqwpR5SD6P0",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# n8n + Crawl4AI Agent for 🛰️ arXiv Research \n\n## Author: [Liang Gang Yu](https://github.com/ylgatatooine/Gliese581c)\n\n\nThis AI agent demonstrates how to use a **Docker-deployed instance of [Crawl4AI](https://docs.crawl4ai.com/)** to crawl and ingest **arXiv paper abstracts**, seamlessly integrated into **n8n** workflows.\n\nBy combining Crawl4AI and n8n, you can automate the discovery and indexing of the latest research papers for use in your own **RAG (Retrieval-Augmented Generation)** pipeline.\n\n> 📦 **Prerequisite**:  \n> Ensure that Crawl4AI is running in a Docker container by following the official [Docker deployment instructions](https://docs.crawl4ai.com/core/docker-deploymeny/).\n\n---\n\n## 🚀 How to Use This Workflow\n\n1. **Run the n8n workflow** by clicking **\"Test workflow\"**.  \n   This will trigger a crawl of the latest arXiv entries (e.g., from [cs.AI](https://arxiv.org/list/cs.AI/recent)), extract paper titles, abstracts, and links, and ingest the results into your **Supabase database**.\n\n2. **Chat with the AI agent** via the **\"Chat\" button**.  \n   The agent uses the ingested data as knowledge, enabling you to ask questions about recent arXiv research.\n\n---\n\n## 🔧 Extend This Workflow!\n\nThis setup is just a starting point. With **Crawl4AI + n8n**, you can:\n\n- 🧠 Filter papers by subfields like `cs.LG`, `cs.CL`, or `stat.ML`\n- 🔍 Use keywords or date filters to narrow the crawl\n- 📚 Summarize abstracts using OpenAI or Claude\n- 🗓️ Automate a daily/weekly digest of trending papers\n- 💬 Build a RAG-enabled assistant with local context\n\nThe possibilities are endless—automate your research pipeline with AI today!\n",
+        "height": 613.6610941618816,
+        "width": 589.875,
+        "color": 6
+      },
+      "id": "1fc78571-39f7-4f2a-925c-2e509e74db92",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2280,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.result.markdown }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "page",
+                "value": "={{ $json.result.url }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "1ff8c50d-93a7-4fef-b510-7da0101ea5b8",
+      "name": "Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        980,
+        1140
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6075172a-c946-4384-922d-4fcc35758f72",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ae8e8047871c5e1f9bdecee242336dd7e1788cc7afc004ec314982b48990f752"
+  },
+  "id": "vSvbMC6KsRRzX563",
+  "tags": []
+}
