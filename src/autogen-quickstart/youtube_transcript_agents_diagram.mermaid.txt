@@ -1,0 +1,9 @@
+ 
+```mermaid
+flowchart TD
+    YT[YouTube Talk 🎥] --> A1[Agent 1: Summarize Talk 📝]
+    A1 --> A2[Agent 2: Fix Grammar ✍️]
+    A1 --> A3[Agent 3: Improve Style 💅]
+    A2 --> A4[Agent 4: Merge & Finalize 🧠]
+    A3 --> A4
+```

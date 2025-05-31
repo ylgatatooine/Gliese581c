@@ -25,15 +25,6 @@ import asyncio  # Import asyncio to run the async function
 
 # Define a tool to fetch YouTube transcripts
 async def fetch_youtube_transcript(video_id: str) -> str:
-    """
-    Fetches the transcript of a YouTube video using its video ID.
-
-    Args:
-        video_id (str): The ID of the YouTube video.
-
-    Returns:
-        str: The formatted transcript of the video.
-    """
     try:
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
         formatted_transcript = "\n".join([f"{item['text']}" for item in transcript])
