@@ -1,0 +1,405 @@
+{
+  "name": "MVP",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        -160
+      ],
+      "id": "0525862c-4aa1-4492-bcf4-3decc8b71e86",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Arxiv News Feed",
+        "height": 620,
+        "width": 1020,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -280,
+        -300
+      ],
+      "typeVersion": 1,
+      "id": "22a4dc0b-5764-4210-bb50-949f3b88a054",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://jamesg.blog/hf-papers.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        -40,
+        -80
+      ],
+      "id": "e73973c5-5d30-4e32-9deb-249c5a5017d3",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        140,
+        -80
+      ],
+      "id": "86040b6d-8885-4581-a4ed-c7f43057ffd5",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.title }}{{ $json.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        580,
+        -180
+      ],
+      "id": "82462f77-64a1-4b0f-a0e8-b017d38a92c1",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize  {{ $json.data }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        920,
+        -180
+      ],
+      "id": "ef26683a-9e25-482e-a3cc-e3b5df808916",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-nano"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        120
+      ],
+      "id": "d8c42e4c-7eb1-4e0f-8b73-113837350d35",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "eXYPZMz1bNoxyz0r",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Summary\": \"summary\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        120
+      ],
+      "id": "3f6b395e-34ab-4672-b3a4-711596c6460b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "1fb1eaf7-f42a-803a-83bc-c9137f01d51b",
+          "mode": "list",
+          "cachedResultName": "Arxiv Daily Papers ",
+          "cachedResultUrl": "https://www.notion.so/1fb1eaf7f42a803a83bcc9137f01d51b"
+        },
+        "title": "Arxiv AI Papers voted by Huggingface",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Title|title",
+              "title": "={{ $('Limit').item.json.title }}"
+            },
+            {
+              "key": "Summary|rich_text",
+              "textContent": "={{ $json.output.Summary }}"
+            },
+            {
+              "key": "PubDate|rich_text",
+              "textContent": "={{ $('Limit').item.json.pubDate }}"
+            },
+            {
+              "key": "Links|rich_text",
+              "textContent": "={{ $('Markdown').item.json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1420,
+        -100
+      ],
+      "id": "eb02f1f2-591f-427e-ba96-ef4a973ee4c2",
+      "name": "Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "nENrhOzwIIooozHR",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  const link = item.json.link;\n  if (link.includes(\"https://huggingface.co/papers/\")) {\n    item.json.link = link.replace(\n      \"https://huggingface.co/papers/\",\n      \"https://arxiv.org/abs/\",\n    );\n  }\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        40
+      ],
+      "id": "a4f7c669-74d6-4da2-bf85-8f92f1f20f45",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        380,
+        -80
+      ],
+      "id": "09f39ff4-1823-4cd0-80fb-d01d9c5629ec",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C085ALTNDL5",
+          "mode": "list",
+          "cachedResultName": "dailypapers"
+        },
+        "text": "=Title: {{ $json.property_title }}\nSummary: {{ $json.property_summary }}\nLink: {{ $json.property_links }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1640,
+        -100
+      ],
+      "id": "ba511926-267e-4c0d-b9dd-309ccc6f70e3",
+      "name": "Slack",
+      "webhookId": "53006336-17f9-4c8e-839f-d2d4b15e4990",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "4f4hd4Z1rCaLlZDr",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -220,
+        20
+      ],
+      "id": "034baf2f-a020-4d36-b0fb-7b1b04ea21c8",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## Send top 10 papers to Notion & Slack ",
+        "height": 340,
+        "width": 480,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        -220
+      ],
+      "typeVersion": 1,
+      "id": "2ccc3495-422e-4a93-9979-e0b9dd5bfa76",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion": {
+      "main": [
+        [
+          {
+            "node": "Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "74c64e2e-2015-471c-9f1a-b863ce2d96e4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "25c2767b347b712a43acf5c65288b4519b30191187f8e25ec0ad9305bc6a71c0"
+  },
+  "id": "iHBlOcn8eUwMsCl2",
+  "tags": []
+}
