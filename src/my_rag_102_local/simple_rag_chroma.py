@@ -56,7 +56,7 @@ if __name__ == '__main__':
     update_vector_db()
 
     # Example question for the chatbot
-    # question = 'How many kinds of cat are there in the world?'
+    # question = 'Who married Gene Vandergrove?'
     question = input('\nAsk me a question: ')
     input_query = f'Question: {question}\n'
 
