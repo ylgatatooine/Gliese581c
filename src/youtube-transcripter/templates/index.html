@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Transcripter</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding-top: 10%; }
+    input[type="text"] { padding: 10px; width: 40%; border-radius: 5px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; border: none; background-color: #f77; color: white; border-radius: 5px; cursor: pointer; }
+    p { color: #333; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>YouTube Transcripter</h1>
+  <p>Extract and download transcripts from any YouTube video</p>
+  <input type="text" id="youtubeUrl" placeholder="Paste your YouTube URL here...">
+  <button onclick="getTranscript()">Get Transcript</button>
+  <p id="message"></p>
+
+  <script>
+    async function getTranscript() {
+      const url = document.getElementById('youtubeUrl').value;
+      const response = await fetch('/get-transcript/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'transcript.txt';
+        link.click();
+      } else {
+        const err = await response.json();
+        document.getElementById('message').innerText = err.detail;
+      }
+    }
+  </script>
+</body>
+</html>
